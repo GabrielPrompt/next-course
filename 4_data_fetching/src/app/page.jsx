@@ -1,4 +1,6 @@
+import Button from '@/components/Button'
 import { db } from '@/db'
+import { deleteTodo } from '@/actions'
 
 import Link from 'next/link'
 
@@ -7,23 +9,31 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col justify-center items-center mx-auto p-8 ">
-      <h1>Home Page</h1>
-
       <h1 className="text-2xl font-bold mb-4">Todos</h1>
       <div className="space-y-4">
         {todo.map((todo) => (
           <div
             key={todo.id}
-            className="w-[50vh] h-[55x] bg-gray-700 rounded-lg shadow"
+            className="w-[50vh] h-[55x] bg-gray-100 rounded-lg shadow p-4"
           >
             <div className="flex justify-between items-start p-2">
               <div>
-                <h2 className="text-white font-bold text-base">
-                  {todo.titulo}
-                </h2>
-                <p className="text-white/60 text-sm font-light">
+                <h2 className="text-black font-bold text-xl">{todo.titulo}</h2>
+                <p className="text-black/60 text-sm font-light">
                   {todo.descricao}
                 </p>
+              </div>
+              <div className="flex space-x-2 mt-3">
+                <Link href={`/todos/${todo.id}`}>
+                  <Button color="blue">View</Button>
+                </Link>
+                <Link href={`/todos/${todo.id}/edit`}>
+                  <Button color="yellow">Edit</Button>
+                </Link>
+                <form action={deleteTodo}>
+                  <input type="hidden" name="id" value={todo.id} />
+                  <Button color="red">Delete</Button>
+                </form>
               </div>
             </div>
           </div>
