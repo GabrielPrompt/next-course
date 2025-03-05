@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { db } from './db'
 import { redirect } from 'next/navigation'
 
@@ -10,6 +11,8 @@ export async function deleteTodo(formdata) {
     where: { id },
   })
 
+  revalidatePath('/')
+
   redirect('/')
 }
 
@@ -18,6 +21,7 @@ export const addTodo = async (formData) => {
   const descricao = formData.get('description')
   const status = 'pendente'
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const todo = await db.todo.create({
     data: {
       titulo,
@@ -26,7 +30,7 @@ export const addTodo = async (formData) => {
     },
   })
 
-  console.log(todo)
+  revalidatePath('/')
 
   redirect('/')
 }
@@ -44,21 +48,56 @@ export const updateTodo = async (formState, formData) => {
   const titulo = formData.get('title')
   const descricao = formData.get('description')
 
-  if (titulo.length < 5) {
-    return {
-      errors: 'the title needs at least 5 characters',
+  try {
+    // throw new Error('There was a problem, please try again later ')
+
+    if (titulo.length < 5) {
+      return {
+        errors: 'the title needs at least 5 characters',
+      }
     }
+    if (descricao.length < 10) {
+      return {
+        errors: 'the description needs at least 5 characters',
+      }
+    }
+
+    await db.todo.update({
+      where: { id },
+      data: { titulo, descricao },
+    })
+
+    revalidatePath('/')
+
+    redirect('/')
+  } catch (error) {
+    return { errors: error.message }
   }
-  if (descricao.length < 10) {
-    return {
-      errors: 'the description needs at least 5 characters',
-    }
+}
+
+export async function toggleTodoStatus(formData) {
+  const todoId = Number(formData.get('id'))
+
+  const todo = db.todo.findFirst({
+    where: { todoId },
+  })
+
+  if (!todo) {
+    throw new Error('Todo does not exist ')
   }
 
+  const novoStatus = todo.status === 'pendente' ? 'completa' : 'pendente'
+
   await db.todo.update({
-    where: { id },
-    data: { titulo, descricao },
+    where: {
+      id: todoId,
+    },
+    data: {
+      status: novoStatus,
+    },
   })
+
+  revalidatePath('/')
 
   redirect('/')
 }
