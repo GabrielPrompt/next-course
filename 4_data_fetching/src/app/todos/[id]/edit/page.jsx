@@ -11,7 +11,7 @@ const TodoEdit = async ({ params }) => {
       <h1 className="text-2xl font-bold text-center mb-6">
         Edit Todo: {todo.titulo}
       </h1>
-      <TodoForm todo={todo} />
+      <TodoForm todo={todo} readonly={false} />
     </div>
   )
 }

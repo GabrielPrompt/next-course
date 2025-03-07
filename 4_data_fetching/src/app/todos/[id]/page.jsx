@@ -1,3 +1,4 @@
+import TodoForm from '@/components/TodoForm'
 import { db } from '@/db'
 import { notFound } from 'next/navigation'
 
@@ -14,8 +15,11 @@ const TodoView = async ({ params }) => {
   if (!todo) return notFound()
 
   return (
-    <div className="flex justify-center items-center">
-      <h1 className="font-bold text-lg">{todo.titulo}</h1>
+    <div className="max-w-md mx-auto mt-10">
+      <h1 className="text-2xl font-bold text-center mb-6">
+        View Todo: {todo.titulo}
+      </h1>
+      <TodoForm todo={todo} readonly={true} />
     </div>
   )
 }

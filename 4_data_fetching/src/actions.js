@@ -58,7 +58,7 @@ export const updateTodo = async (formState, formData) => {
     }
     if (descricao.length < 10) {
       return {
-        errors: 'the description needs at least 5 characters',
+        errors: 'the description needs at least 10 characters',
       }
     }
 
@@ -69,7 +69,7 @@ export const updateTodo = async (formState, formData) => {
 
     revalidatePath('/')
 
-    redirect('./todos')
+    return { success: true }
   } catch (error) {
     return { errors: error.message }
   }
@@ -78,8 +78,8 @@ export const updateTodo = async (formState, formData) => {
 export async function toggleTodoStatus(formData) {
   const todoId = Number(formData.get('id'))
 
-  const todo = db.todo.findFirst({
-    where: { todoId },
+  const todo = await db.todo.findFirst({
+    where: { id: todoId },
   })
 
   if (!todo) {

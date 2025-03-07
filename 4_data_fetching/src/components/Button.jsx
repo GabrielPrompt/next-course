@@ -9,7 +9,7 @@ const Button = ({ children, color }) => {
 
   return (
     <button
-      className={`${colors[color]} text-white font-bold py-2 px-4 rounded`}
+      className={`${colors[color]} text-white font-bold lg:py-2 lg:px-4 py-2 px-2 rounded`}
     >
       {children}
     </button>

@@ -1,10 +1,11 @@
 'use client'
+
 const Checkbox = ({ checked }) => {
   return (
     <input
       type="checkbox"
+      className="form-checkbox w-5 h-5"
       checked={checked}
-      className="form-checkbox h-5 w-5"
       onChange={(e) => e.target.form.requestSubmit()}
     />
   )
