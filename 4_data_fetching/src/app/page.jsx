@@ -1,8 +1,9 @@
 import Button from '@/components/Button'
 import { db } from '@/db'
-import { deleteTodo } from '@/actions'
+import { deleteTodo, toggleTodoStatus } from '@/actions'
 
 import Link from 'next/link'
+import Checkbox from '@/components/Checkbox'
 
 export default async function Home() {
   const todo = await db.todo.findMany()
@@ -14,14 +15,25 @@ export default async function Home() {
         {todo.map((todo) => (
           <div
             key={todo.id}
-            className="w-[50vh] h-[55x] bg-gray-100 rounded-lg shadow p-4"
+            className="w-[70vh] h-[55x] bg-gray-100 rounded-lg shadow p-4"
           >
             <div className="flex justify-between items-start p-2">
               <div>
-                <h2 className="text-black font-bold text-xl">{todo.titulo}</h2>
-                <p className="text-black/60 text-sm font-light">
-                  {todo.descricao}
-                </p>
+                <div>
+                  <h2 className="text-black font-bold text-xl">
+                    {todo.titulo}
+                  </h2>
+                  <p className="text-black/60 text-sm font-light">
+                    {todo.descricao}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="italic">Completed</p>
+                  <form action={toggleTodoStatus}>
+                    <input type="hidden" name="id" value={todo.id} />
+                    <Checkbox />
+                  </form>
+                </div>
               </div>
               <div className="flex space-x-2 mt-3">
                 <Link href={`/todos/${todo.id}`}>

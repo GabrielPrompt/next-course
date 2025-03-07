@@ -69,7 +69,7 @@ export const updateTodo = async (formState, formData) => {
 
     revalidatePath('/')
 
-    redirect('/')
+    redirect('./todos')
   } catch (error) {
     return { errors: error.message }
   }
