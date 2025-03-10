@@ -16,23 +16,54 @@ export async function deleteTodo(formdata) {
   redirect('/')
 }
 
-export const addTodo = async (formData) => {
+export const addTodo = async (formState, formData) => {
   const titulo = formData.get('title')
   const descricao = formData.get('description')
   const status = 'pendente'
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const todo = await db.todo.create({
-    data: {
-      titulo,
-      descricao,
-      status,
-    },
-  })
+  try {
+    if (titulo.length < 5) {
+      return {
+        errors: 'the title needs at least 5 characters',
+      }
+    }
+    if (descricao.length < 10) {
+      return {
+        errors: 'the description needs at least 10 characters',
+      }
+    }
+    if (descricao.length > 244) {
+      return {
+        errors: 'the description should not exceed 244 characters',
+      }
+    }
+    if (titulo.length > 44) {
+      return {
+        errors: 'the title should not exceed 44 characters',
+      }
+    }
+    if (!titulo || titulo.trim().length === 0) {
+      return { errors: 'The title cannot be empty or only spaces' }
+    }
+    if (!descricao || descricao.trim().length === 0) {
+      return { errors: 'The description cannot be empty or only spaces' }
+    }
 
-  revalidatePath('/')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const todo = await db.todo.create({
+      data: {
+        titulo,
+        descricao,
+        status,
+      },
+    })
 
-  redirect('/')
+    revalidatePath('/')
+
+    return { success: true }
+  } catch (error) {
+    return { errors: error.message }
+  }
 }
 
 export const FindTodoById = async (id) => {
@@ -60,6 +91,22 @@ export const updateTodo = async (formState, formData) => {
       return {
         errors: 'the description needs at least 10 characters',
       }
+    }
+    if (descricao.length > 244) {
+      return {
+        errors: 'the description should not exceed 244 characters',
+      }
+    }
+    if (titulo.length > 44) {
+      return {
+        errors: 'the title should not exceed 44 characters',
+      }
+    }
+    if (!titulo || titulo.trim().length === 0) {
+      return { errors: 'The title cannot be empty or only spaces' }
+    }
+    if (!descricao || descricao.trim().length === 0) {
+      return { errors: 'The description cannot be empty or only spaces' }
     }
 
     await db.todo.update({

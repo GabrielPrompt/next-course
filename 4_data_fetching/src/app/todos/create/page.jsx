@@ -1,13 +1,35 @@
+'use client'
+
 import { addTodo } from '@/actions'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { useFormState } from 'react-dom'
 
 const TodoPage = () => {
+  const [formState, action] = useFormState(addTodo, { errors: '' })
+
+  const router = useRouter()
+
+  useEffect(() => {
+    if (formState.success) {
+      router.push('/') // Redireciona para a Home
+    }
+  }, [formState.success, router])
+
   return (
     <div className="max-w-md mx-auto mt-10">
       <h1 className="text-2xl font-bold text-center mb-6">Create new Todo</h1>
       <form
-        action={addTodo}
+        action={action}
         className="flex flex-col gap-4 p-4 bg-white shadow-lg rounded-lg "
       >
+        {formState.errors ? (
+          <div className="my-4 p-2 bg-red-400 border border-red-700">
+            {formState.errors}
+          </div>
+        ) : (
+          ''
+        )}
         <label
           htmlFor="title"
           className="block text-sm font-medium text-gray-700"
