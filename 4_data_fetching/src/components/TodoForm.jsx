@@ -14,7 +14,7 @@ const TodoForm = ({ todo, readonly }) => {
 
   useEffect(() => {
     if (formState.success) {
-      router.push('/') // Redireciona para a Home
+      router.push('/')
     }
   }, [formState.success, router])
 

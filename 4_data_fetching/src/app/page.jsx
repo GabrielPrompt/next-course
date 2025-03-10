@@ -15,7 +15,7 @@ export default async function Home() {
         {todo.map((todo) => (
           <div
             key={todo.id}
-            className={`w-[80vw] md:w-[70w] lg:w-[55vw] bg-gray-100 rounded-lg shadow p-4 ${todo.status === 'completa' ? 'bg-blue-200' : ''}`}
+            className={`w-[80vw] md:w-[70w] lg:w-[55vw] bg-gray-100 rounded-lg shadow p-4 ${todo.status === 'completa' ? 'bg-blue-100' : ''}`}
           >
             <div className="flex justify-between items-start p-2">
               <div>
